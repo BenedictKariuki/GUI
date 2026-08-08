@@ -5,14 +5,27 @@
 */
 
  asm(
-    //".code16gcc\n" 
+    ".code16gcc\n" 
     "call main\n"
     "call exit\n"
 );
 
-#include <gui.h>
+#include <gui.h> // types
+#include <assembly.h>
 
 
 void main(){
-
+    print($1 "Hello world!\n");
 }
+
+void putchar(int8 c){
+    bputchar(c);
+}
+
+void print(int8* str){
+    int8* p;
+    for(p=str; *p; p++){
+        putchar(*p);
+    }
+}
+
