@@ -5,10 +5,7 @@ bits 16
 global exit
 global bputchar
 
-	; AH = 0E
-	; AL = ASCII character to write
-	; BH = page number (text modes)
-	; BL = foreground pixel color (graphics modes)
+
 exit:
     push bp
     mov bp, sp
