@@ -21,8 +21,10 @@ void main(){
     heap_ptr = &heap;
     videoinit = false;
     videomode(TEXT40x25);
-    point* pt = mkpoint(10, 15);
-    drawpoint(pt);
+    point* pt1 = mkpoint(1, 10, 0);
+    point* pt2 = mkpoint(20, 10, 0);
+    line* line = mkline(pt1, pt2, 0, 2);
+    drawline(line);
     freeall();
 }
 

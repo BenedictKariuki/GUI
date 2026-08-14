@@ -18,11 +18,22 @@ struct s_point{
 
 typedef struct s_point point;
 
+/* A data structure representing a line. We need two points to draw a line.
+*/
+struct s_line{
+    point* pt1, *pt2;
+    int8 color: 4;
+    int8 thickness;
+};
+typedef struct s_line line;
+
 void videomode(int8);
 int8 getmaxx(void);
 int8 getmaxy(void);
 boolean drawpoint(point*);
+boolean drawline(line*);
 
 /* constructors */
-point* mkpoint(int16, int16);
+point* mkpoint(int16, int16, int8);
+line* mkline(point*, point*, int8, int8);
 
