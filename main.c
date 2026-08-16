@@ -21,10 +21,13 @@ void main(){
     heap_ptr = &heap;
     videoinit = false;
     videomode(TEXT40x25);
-    point* pt1 = mkpoint(1, 10, 0);
-    point* pt2 = mkpoint(20, 10, 0);
-    line* line = mkline(pt1, pt2, 0, 2);
-    drawline(line);
+
+    point* pt1 = mkpoint(5, 5, 0);
+    point* pt2 = mkpoint(10, 20, 0);
+
+    rectangle* rect = mkrectangle(pt1, pt2, 0, 0, 4, 1);
+    drawrectangle(rect);
+
     freeall();
 }
 

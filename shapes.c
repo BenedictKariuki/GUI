@@ -89,33 +89,88 @@ boolean drawline(line* ln){
         startx = ln->pt1->x;
         maxx = (ln->pt1->x + ln->thickness);
         starty = ln->pt1->y;
-        maxy = ln->pt2->y;
+        maxy = ln->pt2->y + ln->thickness;
         if(maxx > scr_maxx)
             maxx = scr_maxx;
         if(maxy > scr_maxy)
             maxy = scr_maxy;
+        for(y=starty; y<maxy; y++){
+            for(x=startx; x<maxx; x++){
+                pt = mkpoint(x,y,ln->color);
+                if(pt)
+                    drawpoint(pt);
+            }
+        }
     }
-
     else if(ln->pt1->y == ln->pt2->y){
         starty = ln->pt1->y;
         maxy = (ln->pt1->y + ln->thickness);
         startx = ln->pt1->x;
-        maxx = ln->pt2->x;
+        maxx = ln->pt2->x + ln->thickness;
         if(maxy > scr_maxy)
             maxy = scr_maxy;
         if(maxx > scr_maxx)
             maxx = scr_maxx;
+        for(x=startx; x<maxx; x++){
+            for(y=starty; y<maxy; y++){
+                pt = mkpoint(x,y,ln->color);
+                if(pt)
+                    drawpoint(pt);
+            }
+        }
     }
 
     else
         return false;
 
-    for(x=startx; x<maxx; x++){
-        for(y=starty; y<maxy; y++){
-            pt = mkpoint(x,y,ln->color);
-            if(pt)
-                drawpoint(pt);
-        }
-    }
+    return true;
+}
+
+rectangle* mkrectangle(point* pt1, point* pt2, int8 fgcolor, int8 bgcolor, int16 thickness, boolean solid){
+    rectangle* rect;
+    int16 size;
+    if(!pt1 || !pt2)
+        return (rectangle*)0;
+    size = sizeof(struct s_rectangle);
+    rect = (rectangle*)alloc(size);
+    if(!rect)
+        return (rectangle*)0; 
+    rect->pt1 = pt1;
+    rect->pt2 = pt2;
+    rect->fgcolor = fgcolor;
+    rect->bgcolor = bgcolor;
+    rect->thickness = thickness;
+    rect->flags = FL_NONE;
+    if(solid)
+        rect->flags |= FL_SOLID;
+    return rect;
+}
+
+boolean drawrectangle(rectangle* rect){
+    int16 maxx, maxy;
+    point* pt3, *pt4;
+    maxx = getmaxx();
+    maxy = getmaxy();
+    if(!videoinit)
+        return false;
+    if(!rect)
+        return false;
+    if((rect->pt1->x > maxx) || (rect->pt1->y > maxy))
+        return false;
+    if((rect->pt2->x < rect->pt1->x) || (rect->pt2->y < rect->pt1->y))
+        return false;
+
+    pt3 = mkpoint(rect->pt2->x, rect->pt1->y, rect->fgcolor);
+    pt4 = mkpoint(rect->pt1->x, rect->pt2->y, rect->fgcolor);
+    
+    line* top, *left, *bottom, *right;
+    top = mkline(rect->pt1, pt3, rect->fgcolor, rect->thickness);
+    left = mkline(rect->pt1, pt4, rect->fgcolor, rect->thickness);
+    bottom = mkline(pt4, rect->pt2, rect->fgcolor, rect->thickness);
+    right = mkline(pt3, rect->pt2, rect->fgcolor, rect->thickness);
+    drawline(top);
+    drawline(left);
+    drawline(bottom);
+    drawline(right);
     return true;
 }

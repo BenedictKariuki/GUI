@@ -1,4 +1,4 @@
-CFLAGS = -fno-stack-protector -fno-pie -O0 -Wall -fno-pie -std=gnu23 -m16 -ffreestanding -I include -nostdlib
+CFLAGS = -fno-stack-protector -fno-pie -O0 -Wall -std=gnu23 -m16 -ffreestanding -I include -nostdlib
 LDFLAGS = -m elf_i386 --nmagic --script=gui.ld
 OBJECTS = main.o shapes.o
 BOBJECTS = bgfx.o
