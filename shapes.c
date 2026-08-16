@@ -14,11 +14,11 @@ void videomode(int8 mode){
     return;
 }
 
-int8 getmaxx(){
+int16 getmaxx(){
     return MAXX;
 }
 
-int8 getmaxy(){
+int16 getmaxy(){
     return MAXY;
 }
 
@@ -31,6 +31,7 @@ point* mkpoint(int16 x, int16 y, int8 color){
         return (point*)0;
     pt->x = x;
     pt->y = y;
+    pt->color = color;
     return pt;
 }
 
@@ -44,7 +45,7 @@ boolean drawpoint(point* pt){
     maxy = getmaxy();
     if((pt->x > maxx) || (pt->y > maxy)) 
         return false;
-    bdrawpointT(pt->x, pt->y);
+    bdrawpoint(pt->x, pt->y, pt->color);
     return true;
 }
 

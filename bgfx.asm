@@ -8,25 +8,11 @@ global bputchar
 global bvideomode
 global bgetchar
 global bdrawpointT
-
+global bdrawpoint
 
 exit:
     mov ax, 0x4c00
     int 0x21
-    ;push bp
-    ;mov bp, sp
-
-    ;xor ax, ax      ; we want ax to be zero. DOS function calls preserve the contents of all the registers except the AX register.
-    ;int 0x21        ; 
-
-    ;.halt:
-     ;   cli         ; clear interrupt flag
-      ;  hlt         ; stop the CPU until a hardware interrupt occurs
-        ;jmp .halt   ; loop back to the halt location   
-
-        ;mov sp, bp
-        ;pop bp
-        ;ret
 
 bputchar:
         push bp
@@ -60,6 +46,22 @@ bgetchar:
         xor ax, ax
         int 0x16
         
+        mov sp, bp
+        pop bp
+        ret
+
+bdrawpoint:
+        push bp
+        mov bp, sp
+
+        arg ax, 2
+        arg dx, 0
+        arg cx, 1
+
+        mov ah, 0x0c
+        xor bx, bx
+        int 0x10
+
         mov sp, bp
         pop bp
         ret

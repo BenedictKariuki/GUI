@@ -20,12 +20,13 @@ extern boolean videoinit;
 void main(){
     heap_ptr = &heap;
     videoinit = false;
-    videomode(TEXT40x25);
+    videomode(BGFX640x480);
 
-    point* pt1 = mkpoint(5, 5, 0);
-    point* pt2 = mkpoint(10, 20, 0);
+    int8 color = 2;
+    point* pt1 = mkpoint(100, 100, color);
+    point* pt2 = mkpoint(300, 400, color);
 
-    rectangle* rect = mkrectangle(pt1, pt2, 0, 0, 4, 1);
+    rectangle* rect = mkrectangle(pt1, pt2, color, color, 4, 1);
     drawrectangle(rect);
 
     freeall();

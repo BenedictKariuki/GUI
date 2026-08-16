@@ -3,9 +3,10 @@
 #pragma once
 #include <gui.h>
 
-#define MAXX 40
-#define MAXY 25
-#define TEXT40x25 0x0
+#define MAXX 640
+#define MAXY 480
+#define BTEXT40x25 0x00
+#define BGFX640x480 0x12
 
 #define FL_NONE 0x00
 #define FL_SOLID 0x01
@@ -44,8 +45,8 @@ typedef struct s_rectangle rectangle;
 
 
 void videomode(int8);
-int8 getmaxx(void);
-int8 getmaxy(void);
+int16 getmaxx(void);
+int16 getmaxy(void);
 boolean drawpoint(point*);
 boolean drawline(line*);
 boolean drawrectangle(rectangle*);
