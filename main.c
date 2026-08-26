@@ -24,11 +24,12 @@ void main(){
 
     int8 color = 2;
     point* pt1 = mkpoint(100, 100, color);
-    point* pt2 = mkpoint(300, 400, color);
+    point* pt2 = mkpoint(400, 400, color);
 
     rectangle* rect = mkrectangle(pt1, pt2, color, color, 4, 1);
-    drawrectangle(rect);
 
+    drawrectangle(rect);
+    
     freeall();
 }
 
@@ -63,8 +64,19 @@ void* alloc(int16 size){
 
 void freeall(void){
     heap_ptr = &heap;
+}
+
+void copy(int8* dst, int8* src, int16 size){
+    int16 n;
+    int8* dst_ptr;
+    int8* src_ptr;
+
+    for(n=0, dst_ptr=dst, src_ptr=src; n < size; n++, dst_ptr++, src_ptr++){
+        *dst_ptr = *src_ptr;
+    }
     return;
 }
+
 
 
 

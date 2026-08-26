@@ -22,3 +22,4 @@ void* alloc(int16);
 void freeall(void);
 void videomode(int8);
 int8 getchar(void);
+void copy(int8*, int8*, int16);
