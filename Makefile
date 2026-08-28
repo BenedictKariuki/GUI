@@ -19,10 +19,10 @@ main.o: main.c include/gui.h include/assembly.h include/shapes.h
 shapes.o: shapes.c include/gui.h include/assembly.h include/shapes.h
 	cc $(CFLAGS) -c $<
 
-bmp.o: bmp.c include/gui.h include/bmp.h include/images.h
+bmp.o: bmp.c include/gui.h include/bmp.h
 	cc $(CFLAGS) -c $<
 
-bgfx.o: bgfx.asm include/asm/bgfx.h
+bgfx.o: bgfx.asm include/asm/bgfx.inc
 	nasm -f elf32 $< -o $@
 
 clean:

@@ -1,7 +1,7 @@
 ; bgfx.asm
 
 bits 16
-%include "bgfx.h"
+%include "include/asm/bgfx.inc"
 
 global exit
 global bputchar
@@ -9,6 +9,10 @@ global bvideomode
 global bgetchar
 global bdrawpointT
 global bdrawpoint
+global bopen
+global bmove
+global bread
+global bclose
 
 exit:
     mov ax, 0x4c00
@@ -88,8 +92,98 @@ bdrawpointT:
         mov cx, 0x01
         int 0x10
 
-        ;mov ax, 0x01
+        ; mov ax, 0x01
         mov sp, bp
         pop bp
         ret
         
+bopen:
+        push bp
+        mov bp, sp
+
+        mov ax, 0x3d00
+        arg dx, 0
+
+        clc
+        int 0x21
+
+        jc .error
+        jmp .end
+
+        .error:
+                xor ax, ax
+        .end:
+                mov sp, bp
+                pop bp
+                ret
+
+bmove:
+        push bp
+        mov bp, sp
+
+        mov ax, 0x4200
+        arg bx, 0
+        xor cx, cx
+        arg dx, 1
+
+        clc
+        int 0x21
+
+        jc .error
+        mov ax, 0x01
+        jmp .end
+
+        .error:
+                xor ax, ax
+        .end:
+                mov sp, bp
+                pop bp
+                ret
+
+bclose:
+        push bp
+        mov bp, sp
+
+        mov ax, 0x3e00
+        arg bx, 0
+
+        clc
+        int 0x21
+
+        jc .error
+        mov ax, 0x01
+        jmp .end
+
+        .error:
+                xor ax, ax
+        .end:
+                mov sp, bp
+                pop bp
+                ret
+
+read_buf dw 0x00
+
+bread:
+        push bp
+        mov bp, sp
+
+        mov ax, 0x3f00
+        arg bx, 0
+        mov cx, 1
+        mov dx, read_buf
+
+        clc
+        int 0x21
+
+        jc .error
+        mov bx, read_buf
+        xor ax, ax
+        mov byte [bx], al
+        
+        jmp .end
+        .error:
+                xor ax, ax
+        .end:
+                mov sp, bp
+                pop bp
+                ret
