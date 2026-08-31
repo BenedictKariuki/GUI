@@ -13,10 +13,12 @@ asm(
 #include <assembly.h>
 #include <shapes.h>
 #include <bmp.h>
+#include <omnistd.h>
 
 int8 *heap_ptr;
 extern boolean videoinit;
 
+/*
 void main()
 {
     heap_ptr = &heap;
@@ -49,7 +51,7 @@ void main()
 
     freeall();
 }
-
+*/
 void putchar(int8 c)
 {
     bputchar(c);
@@ -89,19 +91,6 @@ void freeall(void)
     heap_ptr = &heap;
 }
 
-void copy(int8 *dst, int8 *src, int16 size)
-{
-    int16 n;
-    int8 *dst_ptr;
-    int8 *src_ptr;
-
-    for (n = 0, dst_ptr = dst, src_ptr = src; n < size; n++, dst_ptr++, src_ptr++)
-    {
-        *dst_ptr = *src_ptr;
-    }
-    return;
-}
-
 int16 open(int8 *filename, int16 offset)
 {
     int16 fd, mv;
@@ -127,28 +116,13 @@ void close(int16 fd)
     bclose(fd);
 }
 
-void set(int8 *dst, int8 c, int16 size)
+void main()
 {
-    int16 n;
-    int8 *ptr;
+    int8 buf[BUF_SIZE];
+    freeall();
 
-    for (n = 0, ptr = dst; n < size; n++, ptr++)
-        *ptr = c;
-}
+    snprintf(buf, BUF_SIZE - 1, $1 "Hello %% %s %c", $1 "ben", "A");
+    print(buf);
 
-int16 stringlen(int8 *str)
-{
-    if (!str)
-        return 0;
-    int16 len;
-    int8 *ptr;
-
-    len = 0;
-    ptr = str;
-    while (*ptr)
-    {
-        len++;
-        ptr++;
-    }
-    return len;
+    return;
 }

@@ -9,7 +9,6 @@
 #define false 0
 
 #define packed __attribute__((packed)) /* this syntax is specific to gcc */
-#define ZERO(x, y) set((x), 0, (y))
 
 typedef unsigned char int8;
 typedef unsigned short int int16;
@@ -23,9 +22,6 @@ void *alloc(int16);
 void freeall(void);
 void videomode(int8);
 int8 getchar(void);
-void copy(int8 *, int8 *, int16);
 int16 open(int8 *, int16);
 int8 read(int16);
 void close(int16);
-void set(int8 *, int8, int16);
-int16 stringlen(int8 *);

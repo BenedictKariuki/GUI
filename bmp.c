@@ -1,6 +1,7 @@
 /* bmp.c */
 
 #include <bmp.h>
+#include <omnistd.h>
 
 int8 *addbmp(int8 *file)
 {
@@ -14,9 +15,9 @@ int8 *addbmp(int8 *file)
 		return $1 0;
 	ret = $1 alloc(16);
 	ZERO($1 ret, 16);
-	copy($1 ret, $1 file, size);
+	memorycopy($1 ret, $1 file, size, true);
 	p = ret + size;
-	copy($1 p, $1 ".bmp$", 5);
+	memorycopy($1 p, $1 ".bmp$", 5, true);
 
 	return ret;
 }
@@ -120,7 +121,7 @@ bitmap *parsebmp(int8 *bmp_file)
 
 	n = sizeof(struct s_bmp_header) + sizeof(struct s_info_header);
 	size = sizeof(colors) * 4;
-	copy($1 colors, file + n, size);
+	memorycopy($1 colors, file + n, size, true);
 
 	size = sizeof(struct s_bitmap);
 	bm = (bitmap *)alloc(size);

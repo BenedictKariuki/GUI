@@ -1,6 +1,6 @@
 CFLAGS = -fno-stack-protector -fno-pie -O0 -Wall -std=gnu23 -m16 -ffreestanding -I include -nostdlib
 LDFLAGS = -m elf_i386 --nmagic --script=gui.ld
-OBJECTS = main.o shapes.o bmp.o
+OBJECTS = main.o shapes.o bmp.o omnistd.o
 BOBJECTS = bgfx.o
 NASMENV = -i include/asm/
 export NASMENV
@@ -11,7 +11,8 @@ export NASMENV
 all: gui.com
 
 gui.com: $(OBJECTS) $(BOBJECTS)
-	ld $(LDFLAGS) $^ -o $@ 		# $^ refers to all dependencies $@ refers to the target
+	ld $(LDFLAGS) $^ -o $@ 	
+# $^ refers to all dependencies $@ refers to the target
 
 main.o: main.c include/gui.h include/assembly.h include/shapes.h
 	cc $(CFLAGS) -c $<
@@ -20,6 +21,9 @@ shapes.o: shapes.c include/gui.h include/assembly.h include/shapes.h
 	cc $(CFLAGS) -c $<
 
 bmp.o: bmp.c include/gui.h include/bmp.h
+	cc $(CFLAGS) -c $<
+
+omnistd.o: omnistd.c include/gui.h include/omnistd.h
 	cc $(CFLAGS) -c $<
 
 bgfx.o: bgfx.asm include/asm/bgfx.inc
