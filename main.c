@@ -120,7 +120,7 @@ void main()
 {
     freeall();
 
-    PRINTF($1 "Hello %s from %s %x\n", $1 "world", $1 "the land of C.", 125);
+    PRINTF($1 "Hello %s from %s %X\n", $1 "world", $1 "the land of C.", 125);
 
     // int8 *p;
     // p = int2hex(125);

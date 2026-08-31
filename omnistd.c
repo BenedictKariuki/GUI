@@ -26,22 +26,15 @@ void set(int8 *dst, int8 c, int16 size)
     return;
 }
 
-int8 hexchar(int8 c)
+int8 hexchar(int8 c, boolean isUpper)
 {
-    // putchar(c);
     if (c < 10)
-    {
-
         return c + '0';
-    }
     else if (c > 9)
-    {
-
-        return (c - 10) + 'a';
-    }
+        return isUpper ? ((c - 10) + 'A') : (c - 10) + 'a';
 }
 
-int8 *int2hex(int16 x)
+int8 *int2hex(int16 x, boolean isUpper)
 {
     int8 a, b, c, d, ahex, bhex, chex, dhex;
     int8 *ret;
@@ -50,10 +43,10 @@ int8 *int2hex(int16 x)
     b = (x & 0x0f00) >> 8;
     a = (x & 0xf000) >> 12;
 
-    dhex = hexchar(d);
-    chex = hexchar(c);
-    bhex = hexchar(b);
-    ahex = hexchar(a);
+    dhex = hexchar(d, isUpper);
+    chex = hexchar(c, isUpper);
+    bhex = hexchar(b, isUpper);
+    ahex = hexchar(a, isUpper);
 
     ret = $1 alloc(5);
     ret[0] = ahex;
@@ -61,7 +54,7 @@ int8 *int2hex(int16 x)
     ret[2] = chex;
     ret[3] = dhex;
     ret[4] = 0;
-    // print(ret);
+
     return ret;
 }
 
@@ -140,10 +133,14 @@ int8 *snprintf(int8 *dst, int16 size, int8 *fmt, ...)
                 src_ptr++;
                 break;
             case 'x':
-
+            case 'X':
+                boolean isUpper = false;
                 PEEK(5);
                 ip = (int16 *)++p_ptr;
-                p = int2hex(*ip);
+                if (*src_ptr == 'X')
+                    isUpper = true;
+
+                p = int2hex(*ip, isUpper);
 
                 STRINGCOPY($1 dst_ptr, $1 p, 4);
                 dst_ptr += 4;

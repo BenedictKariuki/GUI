@@ -30,7 +30,8 @@
     } while (false);
 
 void set(int8 *, int8, int16);
-void memorycopy(int8 *, int8 *, int16, boolean isString);
+void memorycopy(int8 *, int8 *, int16, boolean);
 int8 *snprintf(int8 *, int16, int8 *, ...);
-int8 *int2hex(int16);
+int8 hexchar(int8, boolean);
+int8 *int2hex(int16, boolean);
 int16 stringlen(int8 *);
