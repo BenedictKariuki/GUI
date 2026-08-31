@@ -89,6 +89,7 @@ int8 *snprintf(int8 *dst, int16 size, int8 *fmt, ...)
                     STRINGCOPY($1 dst_ptr, $1 p, 1);
                     dst_ptr++;
                     src_ptr++;
+                    bytes++;
                 }
 
                 break;
@@ -101,6 +102,7 @@ int8 *snprintf(int8 *dst, int16 size, int8 *fmt, ...)
                     PEEK(len + 1);
                     STRINGCOPY($1 dst_ptr, $1 p, len);
                     dst_ptr += len;
+                    bytes += len;
                 }
                 src_ptr++;
                 break;
@@ -113,11 +115,13 @@ int8 *snprintf(int8 *dst, int16 size, int8 *fmt, ...)
                 STRINGCOPY($1 dst_ptr, $1 p, 4);
                 dst_ptr += 4;
                 src_ptr++;
+                bytes += 4;
                 break;
             case '%':
                 PEEK(2);
                 *dst_ptr++ = '%';
                 src_ptr++;
+                bytes++;
                 break;
             }
             break;
