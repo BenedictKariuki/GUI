@@ -26,9 +26,43 @@ void set(int8 *dst, int8 c, int16 size)
     return;
 }
 
+int8 hexchar(int8 c)
+{
+    // putchar(c);
+    if (c < 10)
+    {
+
+        return c + '0';
+    }
+    else if (c > 9)
+    {
+
+        return (c - 10) + 'a';
+    }
+}
+
 int8 *int2hex(int16 x)
 {
-    return $1 0;
+    int8 a, b, c, d, ahex, bhex, chex, dhex;
+    int8 *ret;
+    d = (x & 0x000f);
+    c = (x & 0x00f0) >> 4;
+    b = (x & 0x0f00) >> 8;
+    a = (x & 0xf000) >> 12;
+
+    dhex = hexchar(d);
+    chex = hexchar(c);
+    bhex = hexchar(b);
+    ahex = hexchar(a);
+
+    ret = $1 alloc(5);
+    ret[0] = ahex;
+    ret[1] = bhex;
+    ret[2] = chex;
+    ret[3] = dhex;
+    ret[4] = 0;
+    // print(ret);
+    return ret;
 }
 
 int16 stringlen(int8 *str)
@@ -56,7 +90,6 @@ int8 *snprintf(int8 *dst, int16 size, int8 *fmt, ...)
     int8 **p_ptr;
     int16 *ip;
     boolean isContinuing;
-    void *mem;
 
     if (!dst || !fmt)
         return $1 0;
@@ -107,11 +140,11 @@ int8 *snprintf(int8 *dst, int16 size, int8 *fmt, ...)
                 src_ptr++;
                 break;
             case 'x':
+
                 PEEK(5);
-                p = *++p_ptr;
-                mem = (void *)p;
-                ip = (int16 *)mem;
+                ip = (int16 *)++p_ptr;
                 p = int2hex(*ip);
+
                 STRINGCOPY($1 dst_ptr, $1 p, 4);
                 dst_ptr += 4;
                 src_ptr++;

@@ -118,11 +118,13 @@ void close(int16 fd)
 
 void main()
 {
-    int8 buf[BUF_SIZE];
     freeall();
 
-    snprintf(buf, BUF_SIZE - 1, $1 "Hello %% %s %c", $1 "ben", "A");
-    print(buf);
+    PRINTF($1 "Hello %s from %s %x\n", $1 "world", $1 "the land of C.", 125);
+
+    // int8 *p;
+    // p = int2hex(125);
+    // print(p);
 
     return;
 }

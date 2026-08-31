@@ -15,8 +15,19 @@
     }
 
 #define ZERO(x, y) set((x), 0, (y))
+
 #define COPY(dst, src, size) memorycopy(dst, src, size, false)
+
 #define STRINGCOPY(dst, src, size) memorycopy(dst, src, size, true)
+
+#define PRINTF(f, args...)                       \
+    do                                           \
+    {                                            \
+        int8 _tmp[BUF_SIZE];                     \
+        ZERO(_tmp, BUF_SIZE);                    \
+        snprintf(_tmp, (BUF_SIZE - 1), f, args); \
+        print(_tmp);                             \
+    } while (false);
 
 void set(int8 *, int8, int16);
 void memorycopy(int8 *, int8 *, int16, boolean isString);
