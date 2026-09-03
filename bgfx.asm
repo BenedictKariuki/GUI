@@ -59,8 +59,8 @@ bdrawpoint:
         mov bp, sp
 
         arg ax, 2
-        arg dx, 0
-        arg cx, 1
+        arg dx, 1
+        arg cx, 0
 
         mov ah, 0x0c
         xor bx, bx
@@ -178,11 +178,11 @@ bread:
         jc .error
         mov bx, read_buf
         xor ax, ax
-        mov byte [bx], al
+        mov byte al, [bx]
         
         jmp .end
         .error:
-                xor ax, ax
+                mov ah, 0xff
         .end:
                 mov sp, bp
                 pop bp

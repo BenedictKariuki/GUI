@@ -10,23 +10,18 @@
 struct s_bmp_header
 {
     int16 signature;
-    int16 _;
-    int16 fSize;
-    int16 __, ___;
-    int16 ____;
-    int16 offset;
+    int fSize;
+    int _;
+    int offset;
 } packed;
 typedef struct s_bmp_header bmp_header;
 
 /* bitmap info header - 40 bytes */
 struct s_info_header
 {
-    int16 _;
-    int16 size;
-    int16 __;
-    int16 width;
-    int16 ___;
-    int16 height;
+    int size;
+    int width;
+    int height;
     int16 ____;
     int16 _____;
     int16 ______, _______;

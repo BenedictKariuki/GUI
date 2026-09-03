@@ -18,7 +18,6 @@ asm(
 int8 *heap_ptr;
 extern boolean videoinit;
 
-/*
 void main()
 {
     heap_ptr = &heap;
@@ -36,22 +35,24 @@ void main()
     boolean ret;
 
     bmp = parsebmp($1 "penguin");
-    if (!bmp)
-    {
-        print($1 "Error\n");
-        freeall();
-        return;
-    }
-
+    // if (!bmp)
+    // {
+    //     print($1 "Error\n");
+    //     freeall();
+    //     return;
+    // }
+    // else
+    //     print($1 "It has something\r\n");
+    // PRINTF($1 "bitmap *bmp = {\n filename:\t%s\n x:\t\t0x%x\n y:\t\t0x%x\n signature: \t0x%x\n size:\t\t0x%x\n offset:\t0x%x\n width:\t\t0x%x\n height:\t0x%x\n}", $1 bmp->filename, bmp->x, bmp->y, bmp->hdr->signature, bmp->info_hdr->size, bmp->hdr->offset, bmp->info_hdr->width, bmp->info_hdr->height);
     ret = drawbmp(bmp, 10, 10);
-    if (ret)
-        print($1 "true");
-    else
-        print($1 "false");
+    //  if (ret)
+    //      print($1 "true");
+    //  else
+    //      print($1 "false");
 
     freeall();
 }
-*/
+
 void putchar(int8 c)
 {
     bputchar(c);
@@ -116,7 +117,7 @@ void close(int16 fd)
     bclose(fd);
 }
 
-void main()
+/*void main()
 {
     freeall();
 
@@ -127,4 +128,4 @@ void main()
     // print(p);
 
     return;
-}
+}*/

@@ -15,9 +15,9 @@ int8 *addbmp(int8 *file)
 		return $1 0;
 	ret = $1 alloc(16);
 	ZERO($1 ret, 16);
-	memorycopy($1 ret, $1 file, size, true);
+	STRINGCOPY($1 ret, $1 file, size);
 	p = ret + size;
-	memorycopy($1 p, $1 ".bmp$", 5, true);
+	STRINGCOPY($1 p, $1 ".bmp", 4);
 
 	return ret;
 }
@@ -25,7 +25,6 @@ int8 *addbmp(int8 *file)
 boolean drawbmp(bitmap *bmp, int16 x, int16 y)
 {
 	int16 size;
-
 	int16 width, fd;
 	int8 *file;
 	point *pptr;
@@ -36,6 +35,7 @@ boolean drawbmp(bitmap *bmp, int16 x, int16 y)
 		return false;
 
 	file = bmp->filename;
+
 	fd = open(file, bmp->hdr->offset);
 	if (!fd)
 		return false;
@@ -44,35 +44,38 @@ boolean drawbmp(bitmap *bmp, int16 x, int16 y)
 	if ((bmp->info_hdr->height * bmp->info_hdr->width) % 2)
 		size++;
 
-	width = bmp->info_hdr->width;
-	// height = bmp->info_hdr->height;
+	width = (bmp->info_hdr->width / 2);
 
-	line = col = 0;
+	line = bmp->info_hdr->height;
+	col = 0;
 
 	for (n = size; n; n--)
 	{
+
 		if (!(n % width))
 		{
-			line++;
+			line--;
 			col = 0;
 		}
 		byte = read(fd);
-		if (!byte)
-		{
-			close(fd);
-			return true;
-		}
+
 		bit_low = (byte & 0x0f);
 		bit_high = (byte & 0xf0) >> 4;
 
 		pptr = mkpoint((col + x), (line + y), GETCOLOR(bmp, bit_high));
-		if (pptr)
-			drawpoint(pptr);
 
+		if (pptr)
+		{
+			drawpoint(pptr);
+		}
+		col++;
 		pptr = mkpoint((col + x), (line + y), GETCOLOR(bmp, bit_low));
-		if (pptr)
-			drawpoint(pptr);
 
+		if (pptr)
+		{
+			drawpoint(pptr);
+		}
+		freeall();
 		col++;
 	}
 	close(fd);
@@ -94,6 +97,7 @@ bitmap *parsebmp(int8 *bmp_file)
 
 	filename = addbmp(bmp_file);
 	fd = open(filename, 0);
+	// PRINTF($1 "File descriptor: %x\n", fd);
 	if (!fd)
 		return (bitmap *)0;
 
@@ -109,19 +113,40 @@ bitmap *parsebmp(int8 *bmp_file)
 	{
 		*p = read(fd);
 	}
+
+	// for (int8 i = 14; i < 54; i++)
+	// {
+	// 	if (!(i % 4))
+	// 		print($1 "\r\n");
+	// 	PRINTF($1 "Byte %x: %x  ", i, file[i]);
+	// }
+	// print($1 "\n");
+
 	close(fd);
 
 	hdr = (bmp_header *)file;
+
 	size = sizeof(struct s_bmp_header);
 	info_hdr = (info_header *)(file + size);
+	// print the raw bytes
+	// print($1 "INFO HEADER:\r\n");
+	// int8 *bytes;
+	// bytes = (int8 *)info_hdr;
+	// for (int8 i = 0; i < 40; i++)
+	// {
+	// 	if (!(i % 4))
+	// 		print($1 "\r\n");
+	// 	PRINTF($1 "Byte %x: %x  ", i, bytes[i]);
+	// }
+
 	size = sizeof(color_table);
 	colors = (color_table *)alloc(size);
 	if (!colors)
 		return (bitmap *)0;
 
 	n = sizeof(struct s_bmp_header) + sizeof(struct s_info_header);
-	size = sizeof(colors) * 4;
-	memorycopy($1 colors, file + n, size, true);
+
+	COPY($1 colors, $1(file + n), size);
 
 	size = sizeof(struct s_bitmap);
 	bm = (bitmap *)alloc(size);
