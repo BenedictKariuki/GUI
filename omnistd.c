@@ -9,7 +9,7 @@ void memorycopy(int8 *dst, int8 *src, int16 size, boolean isString)
     int8 *dst_ptr;
     int8 *src_ptr;
 
-    for (n = 0, dst_ptr = dst, src_ptr = src; isString && *src_ptr && n < size; n++, dst_ptr++, src_ptr++)
+    for (n = 0, dst_ptr = dst, src_ptr = src; isString && n < size; n++, dst_ptr++, src_ptr++)
     {
         *dst_ptr = *src_ptr;
     }
@@ -77,7 +77,6 @@ int16 stringlen(int8 *str)
 
 int8 *snprintf(int8 *dst, int16 size, int8 *fmt, ...)
 {
-    int8 buf[BUF_SIZE];
     int16 bytes, argc, len;
     int8 *dst_ptr, *src_ptr, *p;
     int8 **p_ptr;
@@ -89,11 +88,12 @@ int8 *snprintf(int8 *dst, int16 size, int8 *fmt, ...)
 
     p_ptr = &fmt;
 
-    ZERO($1(&buf), BUF_SIZE);
+    // ZERO(dst, BUF_SIZE);
     bytes = argc = 0;
     src_ptr = fmt;
     dst_ptr = dst;
     isContinuing = true;
+    boolean isUpper = false;
 
     while (*src_ptr && isContinuing)
     {
@@ -134,7 +134,6 @@ int8 *snprintf(int8 *dst, int16 size, int8 *fmt, ...)
                 break;
             case 'x':
             case 'X':
-                boolean isUpper = false;
                 PEEK(5);
                 ip = (int16 *)++p_ptr;
                 if (*src_ptr == 'X')

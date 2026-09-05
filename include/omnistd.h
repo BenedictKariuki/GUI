@@ -3,7 +3,7 @@
 #pragma once
 #include <gui.h>
 
-#define BUF_SIZE 256
+#define BUF_SIZE 512
 
 #define MIN(x, y) ((x) < (y)) ? (x) : (y)
 
@@ -19,15 +19,6 @@
 #define COPY(dst, src, size) memorycopy(dst, src, size, false)
 
 #define STRINGCOPY(dst, src, size) memorycopy(dst, src, size, true)
-
-#define PRINTF(f, args...)                       \
-    do                                           \
-    {                                            \
-        int8 _tmp[BUF_SIZE];                     \
-        ZERO(_tmp, BUF_SIZE);                    \
-        snprintf(_tmp, (BUF_SIZE - 1), f, args); \
-        print(_tmp);                             \
-    } while (false);
 
 void set(int8 *, int8, int16);
 void memorycopy(int8 *, int8 *, int16, boolean);

@@ -22,25 +22,18 @@ struct s_info_header
     int size;
     int width;
     int height;
-    int16 ____;
-    int16 _____;
-    int16 ______, _______;
-    int16 ________, _________;
-    int16 __________, ___________;
-    int16 ____________, _____________;
-    int16 ______________, _______________;
+    int16 _;
+    int16 __;
+    int ___;
+    int ____;
+    int _____;
+    int ______;
+    int _______;
+    int ________;
 } packed;
 typedef struct s_info_header info_header;
 
 /* bitmap color table - 4 * NumColors bytes */
-struct s_rgb
-{
-    int8 red;
-    int8 green;
-    int8 blue;
-    int8 _;
-} packed;
-typedef struct s_rgb rgb;
 
 typedef rgb color_table[16];
 
@@ -58,3 +51,4 @@ typedef struct s_bitmap bitmap;
 bitmap *parsebmp(int8 *);
 boolean drawbmp(bitmap *, int16, int16);
 int8 *addbmp(int8 *);
+int8 getcolor(color_table *, int8);

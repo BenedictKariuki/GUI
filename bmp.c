@@ -3,6 +3,8 @@
 #include <bmp.h>
 #include <omnistd.h>
 
+extern rgb **globalcolors;
+
 int8 *addbmp(int8 *file)
 {
 	int8 *ret, *p;
@@ -44,7 +46,7 @@ boolean drawbmp(bitmap *bmp, int16 x, int16 y)
 	if ((bmp->info_hdr->height * bmp->info_hdr->width) % 2)
 		size++;
 
-	width = (bmp->info_hdr->width / 2);
+	width = (bmp->info_hdr->width) / 2;
 
 	line = bmp->info_hdr->height;
 	col = 0;
@@ -62,24 +64,48 @@ boolean drawbmp(bitmap *bmp, int16 x, int16 y)
 		bit_low = (byte & 0x0f);
 		bit_high = (byte & 0xf0) >> 4;
 
-		pptr = mkpoint((col + x), (line + y), GETCOLOR(bmp, bit_high));
+		pptr = mkpoint((col + x), (line + y), getcolor(bmp->colors, bit_high));
 
 		if (pptr)
 		{
 			drawpoint(pptr);
 		}
 		col++;
-		pptr = mkpoint((col + x), (line + y), GETCOLOR(bmp, bit_low));
+		pptr = mkpoint((col + x), (line + y), getcolor(bmp->colors, (bit_low)));
 
 		if (pptr)
 		{
 			drawpoint(pptr);
 		}
+
 		freeall();
 		col++;
 	}
 	close(fd);
 	return true;
+}
+
+int8 getcolor(color_table *colors, int8 index)
+{
+	int8 red, green, blue;
+	int16 n;
+
+	red = colors[0][index].red;
+	green = colors[0][index].green;
+	blue = colors[0][index].blue;
+
+	for (n = 0; n < 256; n++)
+	{
+		if ((globalcolors[n]->red == red) &&
+			(globalcolors[n]->green == green) &&
+			(globalcolors[n]->blue == blue))
+		{
+
+			return n;
+		}
+	}
+
+	return 0;
 }
 
 bitmap *parsebmp(int8 *bmp_file)
@@ -97,30 +123,22 @@ bitmap *parsebmp(int8 *bmp_file)
 
 	filename = addbmp(bmp_file);
 	fd = open(filename, 0);
-	// PRINTF($1 "File descriptor: %x\n", fd);
+
 	if (!fd)
 		return (bitmap *)0;
 
-	file = (int8 *)alloc(128); // hdr + info_hdr + color_table = 118
+	file = (int8 *)alloc(118); // hdr + info_hdr + color_table = 118
 	if (!file)
 	{
 		close(fd);
 		return (bitmap *)0;
 	}
-	ZERO(file, 128);
+	ZERO(file, 118);
 
 	for (n = 118, p = file; n; n--, p++)
 	{
 		*p = read(fd);
 	}
-
-	// for (int8 i = 14; i < 54; i++)
-	// {
-	// 	if (!(i % 4))
-	// 		print($1 "\r\n");
-	// 	PRINTF($1 "Byte %x: %x  ", i, file[i]);
-	// }
-	// print($1 "\n");
 
 	close(fd);
 
@@ -128,16 +146,6 @@ bitmap *parsebmp(int8 *bmp_file)
 
 	size = sizeof(struct s_bmp_header);
 	info_hdr = (info_header *)(file + size);
-	// print the raw bytes
-	// print($1 "INFO HEADER:\r\n");
-	// int8 *bytes;
-	// bytes = (int8 *)info_hdr;
-	// for (int8 i = 0; i < 40; i++)
-	// {
-	// 	if (!(i % 4))
-	// 		print($1 "\r\n");
-	// 	PRINTF($1 "Byte %x: %x  ", i, bytes[i]);
-	// }
 
 	size = sizeof(color_table);
 	colors = (color_table *)alloc(size);
@@ -146,8 +154,16 @@ bitmap *parsebmp(int8 *bmp_file)
 
 	n = sizeof(struct s_bmp_header) + sizeof(struct s_info_header);
 
-	COPY($1 colors, $1(file + n), size);
+	STRINGCOPY($1(colors), $1(file + n), size);
 
+	int8 _test2[10];
+	int8 *pp;
+	pp = (int8 *)colors;
+	for (int i = 0; i < 64; i++)
+	{
+		snprintf(_test2, 9, $1 "%x ", pp[i]);
+		print(_test2);
+	}
 	size = sizeof(struct s_bitmap);
 	bm = (bitmap *)alloc(size);
 	if (!bm)

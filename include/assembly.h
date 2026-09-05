@@ -11,3 +11,4 @@ void bclose(int16);
 int16 bopen(int8 *);
 int8 bread(int16);
 int16 bmove(int16, int16);
+void bsetpalette(int16, int8, int8, int8);

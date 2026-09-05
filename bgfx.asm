@@ -13,6 +13,7 @@ global bopen
 global bmove
 global bread
 global bclose
+global bsetpalette
 
 exit:
     mov ax, 0x4c00
@@ -187,3 +188,23 @@ bread:
                 mov sp, bp
                 pop bp
                 ret
+
+bsetpalette:
+        push bp
+        mov bp, sp 
+
+        mov ax, 0x1010
+        arg bx, 0
+        xor cx, cx
+        xor dx, dx
+        arg ch, 2
+        arg cl, 3
+        arg dh, 1
+
+        int 0x10
+
+        mov sp, bp
+        pop bp 
+        ret
+        
+
